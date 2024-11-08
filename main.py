@@ -1,6 +1,9 @@
+import matplotlib.pyplot as plt
 import pandas as pd
 import pathlib
 import numpy as np
+import seaborn as sns
+
 
 MESES = {'jan': 1, 'fev': 2, 'mar': 3, 'abr': 4,
          'mai': 5, 'jun': 6, 'jul': 7, 'ago': 8,
@@ -51,15 +54,13 @@ print(60*'-')
 print(base_airbnb.iloc[0])
 
 # price
-base_airbnb['price'] = base_airbnb['price'].str.replace('$', '')
-base_airbnb['price'] = base_airbnb['price'].str.replace(',', '')
-base_airbnb['price'] = base_airbnb['price'].astype(np.float32, copy=False)
+base_airbnb['price'] = base_airbnb['price'].apply(lambda x: float(x.replace('$', '').replace(',', '')))
 
 # extra_people
-base_airbnb['extra_people'] = base_airbnb['extra_people'].str.replace('$', '')
-base_airbnb['extra_people'] = base_airbnb['extra_people'].str.replace(',', '')
-base_airbnb['extra_people'] = base_airbnb['extra_people'].astype(np.float32, copy=False)
-
-
+base_airbnb['extra_people'] = base_airbnb['extra_people'].apply(lambda x: float(x.replace('$', '').replace(',', '')))
 
 print(base_airbnb.dtypes)
+
+plt.figure(figsize=(15, 5))
+sns.heatmap(base_airbnb.corr(numeric_only=True), annot=True, cmap='Blues')
+plt.show()
